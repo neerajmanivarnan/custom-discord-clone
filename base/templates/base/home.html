@@ -3,15 +3,30 @@
 {% block content %}
 
 <h1>
-    This is home page
+    <h1 style="display: flex;justify-content: center;">
+        This is home page
+    </h1>
 
-    <h1>
-        Rooms available
+    <h1 >
+
+        <a class="create-room" href="{% url 'create-room' %}"> Create a Room</a>
+        
         {% for rom in room %}
-            <div>
-                <h3>
-                    {{rom.id}} -- <a href="{% url 'room' rom.id %}"> {{ rom.name }}</a>
-                </h3>
+            <div class="room-container" style="margin: 10px;padding: 10px;border-radius: 8px;">
+                <hr>
+                <a href="{% url 'update-room' rom.id %}" style="display: flex;justify-content: flex-end;">
+                    <button>Edit</button>
+                </a>
+                <div>
+                    <p style="font-size: 15px;margin-bottom: 0;color: aliceblue;">
+                        @{{rom.host.username}}
+                    </p>
+                    <h3 style="margin-top: 0;">
+                         <a href="{% url 'room' rom.id %}" style="text-decoration: none;color: rgb(241, 241, 242);"> {{ rom.name }}</a>
+                    </h3>
+                </div>
+                <small style="font-size: 20px;display: flex;justify-content: flex-end;">{{rom.topic.name}}</small>
+                <hr>
             </div>
     
         {% endfor%}
@@ -19,6 +34,6 @@
 </h1>
 
 
-This is a test case for home page
+
 
 {% endblock content %}
