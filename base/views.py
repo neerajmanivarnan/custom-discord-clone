@@ -1,14 +1,29 @@
 from django.shortcuts import render,redirect
+from django.contrib.auth.models import User
 from django.http import HttpResponse
 from .models import Room,Topic
 from .forms import RoomForm
 from django.db.models import Q
+from django.contrib import messages
 
 # rooms = [
 #     {'id' : '1','name':'Learn Python'},
 #     {'id' : '2','name':'Spring Boot'},
 #     {'id' : '3','name':'Learn React'}
 # ]
+
+
+def loginPage(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        try:
+            user = User.objects.get(username=username)
+        except:
+            messages.error(request,'User not found')
+    context={}
+    return render(request,'base/login_reg.html',context)
 
 def home(request):
     count =0
