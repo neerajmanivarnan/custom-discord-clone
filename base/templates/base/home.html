@@ -35,12 +35,14 @@
             <div class="room-container" >
                 <hr>
 
+                {% if request.user == rom.host %}
                 <a href="{% url 'delete-room' rom.id %}" >
                     <button>Delete</button>
                 </a>
                 <a href="{% url 'update-room' rom.id %}" >
                     <button>Edit</button>
                 </a>
+                {% endif %}
                 <div>
                     <p >
                         @{{rom.host.username}}
