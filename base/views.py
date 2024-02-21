@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from .models import Room,Topic
+from .models import Room,Topic,Message
 from .forms import RoomForm
 from django.db.models import Q
 from django.contrib import messages
@@ -67,6 +67,7 @@ def home(request):
     count =0
     q = request.GET.get('q') if request.GET.get('q') != None else ''
     # rooms = Room.objects.filter(topic__name__icontains=q)
+    
     rooms = Room.objects.filter(Q(topic__name__icontains=q) |
         Q(name__icontains=q) | 
         Q(description__icontains=q)
@@ -84,8 +85,15 @@ def home(request):
 def room(request, pk):
     rooms = Room.objects.get(id=pk)
     room_messages = rooms.message_set.all().order_by('-created')
-
-    context = {'room':rooms,'room_messages':room_messages}        
+    participants = room.participants.all()
+    if request.method == 'POST':
+        message = Message.objects.create(
+            user = request.user,
+            room = rooms,
+            body = request.POST.get('body')
+        )
+        # return redirect('room')
+    context = {'room':rooms,'room_messages':room_messages,'participants':participants}        
     return render(request,'base/room.html',context)  
 
 @login_required(login_url='login')
